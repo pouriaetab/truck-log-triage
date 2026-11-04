@@ -1,4 +1,8 @@
 {
-    "name": "truck-log-triage",
-    "image": "mcr.microsoft.com/devcontainers/python:3.14"
+  "name": "truck-log-triage",
+  "image": "mcr.microsoft.com/devcontainers/python:3.14",
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "postCreateCommand": "pipx install uv==0.13.7 && uv sync --locked"
 }

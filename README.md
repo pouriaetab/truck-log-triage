@@ -5,13 +5,13 @@ It runs on MAN TruckScenes, real data from a truck with 6 lidars, 6 radars and 4
 
 ## Steps
 
-0. Setup: Python 3.14 everywhere, exact tool versions, and a check on every pull request (ruff and pytest).
+0. Setup: Python 3.14 everywhere, every package locked with uv, and a check on every pull request (ruff and pytest).
 
 ## Run the checks
 
 ```
-python3 -m pip install -r requirements.txt
-ruff check . && python3 -m pytest -v
+uv sync --locked
+uv run ruff check . && uv run ruff format --check . && uv run pytest -v
 ```
 
 ## Data and credit

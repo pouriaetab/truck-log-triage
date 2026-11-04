@@ -1,0 +1,4 @@
+{
+    "name": "truck-log-triage",
+    "image": "mcr.microsoft.com/devcontainers/python:3.14"
+}

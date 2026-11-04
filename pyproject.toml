@@ -1,5 +1,26 @@
+[project]
+name = "truck-log-triage"
+version = "0.1.0"
+description = "Triage of autonomous truck drive logs, step by step"
+requires-python = ">=3.14"
+dependencies = [
+    "duckdb==2.0.0",
+    "ipykernel==7.4.0",
+    "matplotlib==3.11.2",
+    "pandas==3.1.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest==9.2.0",
+    "ruff==0.17.3",
+]
+
+[tool.uv]
+package = false  # a project of scripts and notebooks, not an installable library
+
 [tool.pytest.ini_options]
-pythonpath = ["scripts"] # lets the tests import the scripts by name
+pythonpath = ["scripts"]  # lets the tests import the scripts by name
 
 [tool.ruff]
-line-length = 120 # one line of SQL or a long check still fits
+line-length = 120  # one line of SQL or a long check still fits

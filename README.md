@@ -16,5 +16,5 @@ ruff check . && python3 -m pytest -v
 
 ## Data and credit
 
-MAN TruckScenes by MAN Truck & Bus, licensed CC BY-NC_SA 4.0 (non-commercial, with credit).
+MAN TruckScenes by MAN Truck & Bus, licensed CC BY-NC-SA 4.0 (non-commercial, with credit).
 The data is never stored in this repo; each step's script downloads what it needs into data/.

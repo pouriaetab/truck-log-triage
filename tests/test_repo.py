@@ -4,7 +4,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1] # the repo folder
 
 def test_data_is_never_committed():
-    # IMORTANT: the data's license allows sharing only with its own terms, so it never goes into git
+    # IMPORTANT: the data's license allows sharing only with its own terms, so it never goes into git
     assert "data/" in (ROOT / ".gitignore").read_text().splitlines()
 
 

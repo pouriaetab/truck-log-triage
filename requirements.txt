@@ -1,4 +1,4 @@
-# Exast versions, so the Codespace and the GitHub check run the same code
+# Exact versions, so the Codespace and the GitHub check run the same code
 duckdb==2.0.0
 ipykernel==7.4.0
 matplotlib==3.11.2

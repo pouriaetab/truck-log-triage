@@ -1,0 +1,61 @@
+# The form behind "New issue > Bug": every finding is filed the same way, in the data's own names.
+name: Bug
+description: Something wrong found while triaging a scene
+labels: ["bug", "needs-triage"]
+body:
+  - type: input
+    id: where
+    attributes:
+      label: Scene and time
+      description: The scene name from the scene table, and seconds since its first key frame
+      placeholder: "scene-23160c4bff134cdd86b96ee822b4aca9-14 at 0 to 20 s"
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you saw, in one or two sentences
+    validations:
+      required: true
+  - type: dropdown
+    id: source
+    attributes:
+      label: Where it shows in the data
+      options: [sample_data (camera, lidar or radar reading), ego_motion_chassis, ego_motion_cabin, ego_pose (position), sample_annotation (label box), instance (tracked object), scene or weather_annotation, calibrated_sensor]
+    validations:
+      required: true
+  - type: dropdown
+    id: sensor
+    attributes:
+      label: Sensor
+      description: The channel name from the sensor table
+      options: [none, CAMERA_LEFT_BACK, CAMERA_LEFT_FRONT, CAMERA_RIGHT_BACK, CAMERA_RIGHT_FRONT, LIDAR_LEFT, LIDAR_REAR, LIDAR_RIGHT, LIDAR_TOP_FRONT, LIDAR_TOP_LEFT, LIDAR_TOP_RIGHT, RADAR_LEFT_BACK, RADAR_LEFT_FRONT, RADAR_LEFT_SIDE, RADAR_RIGHT_BACK, RADAR_RIGHT_FRONT, RADAR_RIGHT_SIDE, XSENSE_CABIN, XSENSE_CHASSIS]
+    validations:
+      required: true
+  - type: dropdown
+    id: module
+    attributes:
+      label: Suspected module
+      description: This data holds sensor readings, motion, position and labels only; perception, prediction, planning and controls are inferred, never read from it
+      options: [sensor hardware, sensor calibration or timing, localization, label, perception, prediction, planning, controls, not known yet]
+    validations:
+      required: true
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      description: Your judgement; the data has no severity column
+      options: ["S0 no effect on any finding", "S1 one source is wrong but another still gives the right value", "S2 a finding would be wrong without a fix", "S3 the truck's safety behavior would be misjudged"]
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: The query or notebook cell, and the numbers it printed
+  - type: textarea
+    id: cause
+    attributes:
+      label: Root cause
+      description: Fill in when found, going upstream from sensor to controls

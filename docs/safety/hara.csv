@@ -1,0 +1,5 @@
+id,hazard,situation,S,E,C,ASIL,e_evidence,safety_goal,checked_in,review
+H1,stopped vehicle in the lane is missed,highway at 80 km/h,3,4,3,D,highway is 4 of 10 scenes (17% to 69%),detect a stopped vehicle in the lane early enough to stop,Step 3 and Step 7,yes
+H2,hard braking with nothing ahead,highway with a car close behind,2,4,2,B,highway is 4 of 10 scenes (17% to 69%),never brake hard without a confirmed object,Step 3,no
+H3,lane lines lost in rain,highway in rain,3,4,3,D,rain is 2 of 10 scenes (6% to 51%): worst case E4,keep the lane in rain or slow down and stop on the shoulder,Step 4 and Step 7,yes
+H4,person near the truck missed in a yard,terminal at 10 km/h,2,3,3,B,terminal is 2 of 10 scenes; a person near the truck is part of that time,stop for any person inside the truck's path,Step 6 and Step 7,no

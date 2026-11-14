@@ -1,0 +1,7 @@
+id,part,failure_mode,effect,S,O,D,RPN,evidence,tested_in
+F1,lidar,too few points on far objects,object seen late at highway speed,9,6,5,270,median 5 points per box past 200 m against 806 within 25 m,Step 7
+F2,radar,no return from far objects,no speed check on far objects,8,7,5,280,no box past 200 m has a radar point; 78% do within 25 m,Step 7
+F3,camera,blinded in the dark,lane lines and objects missed,8,4,4,128,1 of 10 scenes is dark,Step 4
+F4,logs,sensor reading missing for a key frame,the model fuses the wrong moment,7,3,3,63,every key frame has 16 readings today,Step 2
+F5,motion sensor,vibration read as hard braking,false alarms flood triage,4,6,3,72,-5.88 m/s2 while speed stayed at 23.7 m/s,Step 3
+F6,labels,box missing or wrong class,training and evaluation learn the wrong thing,6,4,5,120,"25,750 boxes, none checked yet",Step 6

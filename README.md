@@ -28,3 +28,7 @@ uv run ruff check . && uv run ruff format --check . && uv run pytest -v
 
 MAN TruckScenes by MAN Truck & Bus, licensed CC BY-NC-SA 4.0 (non-commercial, with credit).
 The data is never stored in this repo; each step's script downloads what it needs into data/.
+
+## Limits of the data
+
+MAN TruckScenes is a public research dataset, not a company fleet log. What it does not record, and what to keep in mind when reading any number here, is in [docs/data-limits.md](docs/data-limits.md), with a source for each line.

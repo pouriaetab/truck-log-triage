@@ -48,3 +48,17 @@ def test_missing_readings_counts_frames_without_all_sensors():
 @needs_data
 def test_every_key_frame_has_all_16_readings():
     assert contract.missing_readings(contract.load("sample_data"), contract.load("sample")).empty
+
+
+def test_motion_gaps_find_a_hole():
+    sample = pd.DataFrame({"scene_token": ["s", "s"], "timestamp": [0, 1_000_000]})
+    motion = pd.DataFrame({"timestamp": [0, 10_000, 20_000, 120_000, 130_000]})  # 0.1 s missing after 0.02 s
+    found = contract.motion_gaps(motion, sample)
+    assert found.to_dict("records") == [{"scene_token": "s", "start": 20_000, "gap_s": 0.1}]
+
+
+@needs_data
+def test_no_motion_gaps():
+    sample = contract.load("sample")
+    for name in ["ego_motion_chassis", "ego_motion_cabin", "ego_pose"]:
+        assert contract.motion_gaps(contract.load(name), sample).empty, name

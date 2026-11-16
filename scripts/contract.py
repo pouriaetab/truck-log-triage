@@ -32,3 +32,18 @@ def missing_readings(sample_data, sample, sensors=16):
     per_frame = sample_data[sample_data["is_key_frame"]].groupby("sample_token").size()
     per_frame = per_frame.reindex(sample["token"], fill_value=0)  # a frame with no reading at all counts as 0
     return per_frame[per_frame < sensors]
+
+
+def motion_gaps(motion, sample, max_gap_s=0.05):
+    """Gaps longer than max_gap is between motion readings, inside each scene's time window."""
+    # NOTE: why 0.05 s: motion is recorded 100 times a second (0.01 s apart), so 0.05 s is 4 readings lost in a
+    #       row; the largest normal gap in the mini data is 0.015 s, so jitter never trips it.
+    windows = sample.groupby("scene_token")["timestamp"].agg(["min", "max"])
+    found = []
+    for scene, (t0, t1) in windows.iterrows():
+        times = motion.loc[motion["timestamp"].between(t0, t1), "timestamp"].sort_values()
+        gaps = times.diff() / 1e6  # microseconds to seconds
+        for start, gap in zip(times.shift(), gaps):
+            if gap > max_gap_s:
+                found.append({"scene_token": scene, "start": int(start), "gap_s": round(gap, 3)})
+    return pd.DataFrame(found, columns=["scene_token", "start", "gap_s"])

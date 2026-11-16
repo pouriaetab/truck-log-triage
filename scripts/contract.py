@@ -25,3 +25,10 @@ def backwards(df, time="timestamp"):
     before = df[["token", time]].rename(columns={"token": "prev", time: "prev_time"})
     linked = df.merge(before, on="prev")  # a first row has prev '' and finds no partner
     return linked[linked[time] <= linked["prev_time"]]
+
+
+def missing_readings(sample_data, sample, sensors=16):
+    """Key frames with fewer key readings than there are sensors."""
+    per_frame = sample_data[sample_data["is_key_frame"]].groupby("sample_token").size()
+    per_frame = per_frame.reindex(sample["token"], fill_value=0)  # a frame with no reading at all counts as 0
+    return per_frame[per_frame < sensors]

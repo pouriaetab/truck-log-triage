@@ -18,3 +18,10 @@ def load(name, data=DATA):
 def orphans(child, key, parent):
     """Rows of child whose key is not a token in parent: a link that points nowhere."""
     return child[~child[key].isin(parent["token"])]
+
+
+def backwards(df, time="timestamp"):
+    """Rows that are not later than the row their prev link points to: time must go forward."""
+    before = df[["token", time]].rename(columns={"token": "prev", time: "prev_time"})
+    linked = df.merge(before, on="prev")  # a first row has prev '' and finds no partner
+    return linked[linked[time] <= linked["prev_time"]]

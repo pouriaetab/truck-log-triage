@@ -26,3 +26,14 @@ def test_every_link_points_to_a_real_row():
     ]
     for child, key, parent in links:
         assert contract.orphans(contract.load(child), key, contract.load(parent)).empty, f"{child}.{key} -> {parent}"
+
+
+def test_backwards_finds_a_step_back_in_time():
+    df = pd.DataFrame({"token": ["a", "b", "c"], "prev": ["", "a", "b"], "timestamp": [10, 20, 15]})
+    assert contract.backwards(df)["token"].tolist() == ["c"]
+
+
+@needs_data
+def test_time_only_goes_forward():
+    for name in ["sample", "sample_data", "ego_motion_chassis", "ego_motion_cabin"]:
+        assert contract.backwards(contract.load(name)).empty, name

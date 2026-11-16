@@ -37,3 +37,14 @@ def test_backwards_finds_a_step_back_in_time():
 def test_time_only_goes_forward():
     for name in ["sample", "sample_data", "ego_motion_chassis", "ego_motion_cabin"]:
         assert contract.backwards(contract.load(name)).empty, name
+
+
+def test_missing_readings_counts_frames_without_all_sensors():
+    sample = pd.DataFrame({"token": ["f1", "f2", "f3"]})
+    sample_data = pd.DataFrame({"sample_token": ["f1", "f1", "f2"], "is_key_frame": [True, True, True]})
+    assert contract.missing_readings(sample_data, sample, sensors=2).to_dict() == {"f2": 1, "f3": 0}
+
+
+@needs_data
+def test_every_key_frame_has_all_16_readings():
+    assert contract.missing_readings(contract.load("sample_data"), contract.load("sample")).empty

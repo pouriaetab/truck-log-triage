@@ -24,7 +24,7 @@ Data used so far: the mini release (10 scenes), metadata only, no lidar, radar o
 | 7 | No HD map. | Lanes, speed limits and road layout are not available, only GPS positions. | paper, Table 1; devkit issue #30 |
 | 8 | No outputs of a self-driving system: no detections, tracks, planned paths, control commands, fault codes or takeovers. | Triage here starts from sensor data and labels, not from the system's own logs and alerts. | paper and schema (none listed) |
 | 9 | Timestamps are shifted for privacy. | The real date and clock time are unknown; the scene tags give the time of day. | paper, section 3.8 |
-| 10 | The height (z) in ego_pose is always 0. | Road slope must come from the motion sensors' pitch, not from position. | devkit schema |
+| 10 | The devkit's schema page says the height (z) in ego_pose is always 0, but in the v1.2 data it holds a height (393 to 595 m in mini). | Check the data, not only the docs; height or slope from z must be tested before any step uses it. | devkit schema; mini data, Step 2 ship 5 |
 | 11 | Faces and license plates are blurred. | No effect on these checks; noted for camera work. | paper, section 3.8 |
 
 ## How the sensors measure
@@ -45,3 +45,9 @@ Data used so far: the mini release (10 scenes), metadata only, no lidar, radar o
 |---|---|---|---|
 | 19 | 10 scenes, 400 key frames. | Shares have wide 95% ranges (rain is 2 of 10 scenes: 6% to 51%). | Step 1b |
 | 20 | Rare things barely appear: 1 animal, and no tag marks a crash or near miss. | Rare hazards can be named (HARA, from the ODD) but not measured here. | Step 1 question 6; paper, section 3.6 |
+
+## How this repo measures
+
+| # | Limit | Why it matters here | Source |
+|---|---|---|---|
+| 21 | Speed worked out from GPS positions has no sign (a distance is never negative), while the motion sensors' vx is negative when the truck backs up. | A truck reversing would show as a speed mismatch in the 2 of 3 vote. None in the mini data (lowest vx is -0.05 m/s); checked on the full data in Step 2b. | Step 2 ship 5 |

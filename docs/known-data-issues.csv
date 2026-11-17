@@ -1,0 +1,3 @@
+check,scene,source,issue,note
+speed_mismatch,scene-23160c4bff134cdd86b96ee822b4aca9-14,chassis,#23,chassis speed reads 0 while the cab and the position give about 5.9 m/s
+speed_mismatch,scene-b201f6e737e34c2d87830fc1e2911516-6,chassis,#23,chassis speed reads 0 while the cab and the position give about 6.8 m/s

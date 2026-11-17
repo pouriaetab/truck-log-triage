@@ -1,7 +1,10 @@
+from pathlib import Path
+
 import contract
 import pandas as pd
 import pytest
 
+KNOWN = Path(__file__).parent.parent / "docs" / "known-data-issues.csv"
 needs_data = pytest.mark.skipif(not (contract.DATA / "scene.json").exists(), reason="run scripts/get_metadata.sh first")
 
 
@@ -62,3 +65,40 @@ def test_no_motion_gaps():
     sample = contract.load("sample")
     for name in ["ego_motion_chassis", "ego_motion_cabin", "ego_pose"]:
         assert contract.motion_gaps(contract.load(name), sample).empty, name
+
+
+def test_limits_of_agreement_on_known_numbers():
+    a = pd.Series([1.1, 0.9, 1.1, 0.9])
+    b = pd.Series([1.0, 1.0, 1.0, 1.0])
+    assert contract.limits_of_agreement(a, b) == (0.0, -0.226, 0.226)
+
+
+def test_position_speed_uses_the_frame_before_and_after():
+    frames = pd.DataFrame({"scene": ["s"] * 3, "timestamp": [0, 500_000, 1_000_000], "x": [0, 3, 6], "y": [0, 4, 8]})
+    speed = contract.position_speed(frames)
+    assert speed.isna().tolist() == [True, False, True]  # the first and last frame have no neighbor on one side
+    assert speed[1] == 10.0  # from (0, 0) to (6, 8) is 10 m, in 1 s
+
+
+def test_odd_source_names_the_broken_sensor():
+    speeds = pd.DataFrame(
+        {
+            "scene": ["ok", "stuck at zero", "edge"],
+            "chassis": [5.0, 0.0, 0.0],
+            "cabin": [5.02, 6.2, 9.0],
+            "position": [5.05, 6.1, None],
+        }
+    )
+    assert contract.odd_source(speeds).to_dict("records") == [
+        {"scene": "stuck at zero", "source": "chassis", "gap": 6.1}
+    ]
+
+
+@needs_data
+def test_speed_sources_agree_except_known_issues():
+    sample, scene, pose = contract.load("sample"), contract.load("scene"), contract.load("ego_pose")
+    chassis, cabin = contract.load("ego_motion_chassis"), contract.load("ego_motion_cabin")
+    speeds = contract.key_frame_speeds(sample, chassis, cabin, pose, scene)
+    known = pd.read_csv(KNOWN).query("check == 'speed_mismatch'")
+    found = contract.odd_source(speeds)
+    assert set(zip(found["scene"], found["source"])) == set(zip(known["scene"], known["source"]))

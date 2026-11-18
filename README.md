@@ -17,6 +17,20 @@ It runs on MAN TruckScenes, real data from a truck with 6 lidars, 6 radars and 4
 4. The strongest "braking", -5.9 m/s^2, is vibration: the speed stays at 23.7 m/s. With a half-second average (a working choice from 10 scenes) the strongest real brake is -1.16 m/s^2, and the speed confirms it.
 5. In two scenes the chassis speed sensor reads 0 for all 20 seconds while the truck drove about 6 m/s (its position and the cab sensor agree). Speed comes from the cab sensor or the position, never the chassis alone.
 
+## Step 2: data contract
+
+`scripts/contract.py` checks that the logs hang together before any finding is built on them, and CI runs it on the
+real metadata on every pull request:
+
+1. Every link points to a real row (9 links, e.g. every labeled box to a real key frame and tracked object).
+2. Time only goes forward along every prev link.
+3. Every key frame has all 16 sensor readings.
+4. No gap longer than 0.05 s in the motion and position data, which record 100 times a second.
+5. Speed from three sources (chassis sensor, cab sensor, GPS position) agrees within 0.5 m/s; a 2 of 3 vote names
+   the broken source, and the scenes listed in `docs/known-data-issues.csv` are the only ones allowed to fail.
+
+`scripts/kinematics.py` (distance and speed change) is checked with property based tests (hypothesis).
+
 ## Run the checks
 
 ```
